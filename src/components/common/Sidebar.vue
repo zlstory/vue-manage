@@ -1,37 +1,44 @@
 <template>
   <div class="sidebar-content">
-    <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
-        <el-radio-button :label="false">展开</el-radio-button>
-        <el-radio-button :label="true">收起</el-radio-button>
-      </el-radio-group> -->
-    <el-menu default-active="1-4-1" 
-            class="el-menu-vertical" 
-            @open="handleOpen"
-            @close="handleClose" 
-            :collapse="isCollapse"
-            background-color="#545c64"
-            text-color="#fff"
-            active-text-color="#ffd04b">
-      <el-submenu index="1">
-        <template slot="title">
-            <i class="el-icon-location"></i>
-            <span slot="title">导航一</span>
+    <el-menu  class="el-menu-vertical" @open="handleOpen" @close="handleClose" :collapse="isCollapse" background-color="#1b2025" text-color="#fff" active-text-color="#ffd04b" router>
+      <!-- 循环数据 -->
+     <template v-for="item in items">
+       <!-- 如果有二级菜单 -->
+      <template v-if='item.subs'>
+        <el-submenu :index="item.index" :key="item.index">
+          <template slot="title">
+            <i :class="item.icon"></i>
+            <span slot="title">{{item.title}}</span>
+          </template>
+          <template v-for='subItem in item.subs'>
+           <!-- 如果有三级菜单 -->
+            <el-submenu v-if="subItem.subs" :index="subItem.index" :key="subItem.index">
+              <template slot="title">
+                {{subItem.title}}
+              </template>
+              <el-menu-item v-for="(threeItem,i) in subItem.subs" :key="i" index="threeItem.index">
+                {{threeItem.title}}
+              </el-menu-item>
+            </el-submenu>
+            <!-- 二级菜单 -->
+            <el-menu-item v-else :index="subItem.index" :key="subItem.index">
+              {{subItem.title}}
+            </el-menu-item>
+          </template>
+        </el-submenu>
       </template>
-    <el-menu-item-group>
-      <el-menu-item index="1-1">选项1</el-menu-item>
-      <el-menu-item index="1-2">选项2</el-menu-item>
-    </el-menu-item-group>
-    <el-menu-item-group>
-      <el-menu-item index="1-3">选项3</el-menu-item>
-    </el-menu-item-group>
-    <el-submenu index="1-4">
-      <span slot="title">选项4</span>
-      <el-menu-item index="1-4-1">选项1</el-menu-item>
-    </el-submenu>
-  </el-submenu>
-
-</el-menu>
-</div>
+      <!-- 没有二级菜单时 -->
+      <template v-else>
+        <el-menu-item :index="item.index" :key="item.index">
+            <i :class="item.icon"></i>
+            <span slot="title">{{item.title}}</span>
+        </el-menu-item>
+      </template>
+     </template>
+     
+      
+    </el-menu>
+  </div>
 </template>
 
 <script>
@@ -39,7 +46,27 @@
     name: "commonSidebar",
     data() {
       return {
-        isCollapse: false
+        isCollapse: false,
+        items:[{
+            icon:'el-icon-tickets',
+            index:'index',
+            title:'页面1'
+        },{
+            icon:'el-icon-document',
+            index:'userMsg',
+            title:'用户页面'
+        },{
+            icon:'el-icon-news',
+            index:'adminMsg',
+            title:'管理员',
+            subs:[{
+                index:'admin1',
+                title:'管理员1'
+            },{
+                index:'admin2',
+                title:'管理员2'
+            }]
+        }]
       };
     },
     methods: {
@@ -54,8 +81,7 @@
 </script>
 
 <style lang='scss' scoped>
-  @import "~static/css/variables";
-  $header-height: 4.5rem;
+  @import '~static/css/variables';
   .sidebar-content {
     display: block;
     position: absolute;
@@ -68,10 +94,14 @@
     width: 0;
   }
   .el-menu-vertical:not(.el-menu--collapse) {
-    width: 200px;
+    width: $sideBar-width;
     min-height: 400px;
   }
   .sidebar-content>ul {
     height: 100%;
+  }
+
+  .el-menu-item:hover{
+    background-color: rgb(65,67,71) !important;
   }
 </style>

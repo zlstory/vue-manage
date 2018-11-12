@@ -28,7 +28,7 @@
         name: 'commonHeader',
         data() {
             return {
-                name:"ad"
+                name:"admin"
             }
         },
         computed:{
@@ -42,7 +42,6 @@
 
 <style lang="scss" scoped>
     @import '~static/css/variables';
-    $header-height:4.5rem;
     .header-content {
         position: relative;
         background: $theme-color-d;
@@ -63,10 +62,10 @@
         cursor: pointer;
     }
     .collapse-btn {
-        padding: 0 20px;
+        padding: 0 4px;
     }
     .logo {
-        width: 180px;
+        width: $sideBar-width;
         text-align: center;
         font-weight: bold;
     }
